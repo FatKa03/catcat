@@ -8,9 +8,18 @@ from sklearn.feature_extraction.text import CountVectorizer
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-# Load the model and vectorizer
-model = pickle.load(open('model/naive_bayes_model.pkl', 'rb'))
-vectorizer = pickle.load(open('model/vectorizer.pkl', 'rb'))
+try:
+    with open('model/naive_bayes_model.pkl', 'rb') as model_file:
+        model = pickle.load(model_file)
+    with open('model/vectorizer.pkl', 'rb') as vectorizer_file:
+        vectorizer = pickle.load(vectorizer_file)
+except Exception as e:
+    print(f"Error loading model: {e}")
+    # Fallback sederhana jika model gagal dimuat
+    model = None
+    vectorizer = None
+
+
 
 # Preprocessing function
 def preprocess_text(text):
